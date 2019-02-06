@@ -19,9 +19,9 @@ class Vector {
 }
 
 class Actor {
-	constructor(position = new Vector(),
+	constructor(position = new Vector(0, 0),
 			    size = new Vector(1, 1),
-			    speed = new Vector()) {
+			    speed = new Vector(0, 0)) {
 		if(position instanceof Vector &&
 		   size instanceof Vector &&
 		   speed instanceof Vector) {
@@ -31,15 +31,28 @@ class Actor {
 		} else {
 			throw new Error('В конструктор передан не вектор');
 		}
-		this.left = this.pos.x;
-		this.right = this.pos.x + this.size.x;
-		this.top = this.pos.y;
-		this.bottom = this.pos.y + this.size.y;
-
 	}
-
+	
 	act() {
 	}
+
+	
+	get left() {
+		return this.pos.x;
+	}
+	get right() {
+		return this.pos.x + this.size.x;
+	}
+	get top() {
+		return this.pos.y;
+	}
+	get bottom() {
+		return this.pos.y + this.size.y;
+	}
+	get type() {
+		return 'actor';
+	}
+
 	isIntersect(anyObj) {
 		const farAwayDistance = 100;
 		if(!(anyObj instanceof Actor)) {
@@ -88,47 +101,50 @@ class Actor {
 	}
 }
 
-Object.defineProperty(Actor.prototype, 'type', {
-  	value: 'actor'
-})
-
 class Level {
 	constructor(grid = [], actors = []) {
-		this.grid = grid;
-		this.actors = actors;
+		this.grid = grid.slice();
+		this.actors = actors.slice();
 		this.height = grid.length;
 		this.width = 0;
 
-		let diff = false;
 		if(grid[0]) {
-			let max = grid[0];
-			for(let i = 0; i < grid.length; i++) {
-				if(grid[i].length > max) {
-					max = grid[i].length;
+			let diff = false;
+			let max = grid[0].length;
+			for(let row of grid) {
+				if(row.length > max) {
 					diff = true;
+					max = row.length;
 				}
 			}
 			this.width = diff ? grid[max].length : grid[0].length;
 		}
+
 		this.status = null;
 		this.finishDelay = 1;
 		this.player = this.actors.filter(actor => actor.type === 'player').shift();
 	}
 	isFinished() {
-		if(this.status !== null && this.finishDelay < 0) {
-			return true;
-		}
-		return false;
+		return this.status !== null && this.finishDelay < 0;
 	}
 	actorAt(actor) {
 		if(actor === undefined || !(actor instanceof Actor)) {
 			throw new Error('Ошибка в actor');
 		}
-		for(let i = 0; i < this.actors.length; i++) {
-			let obj = this.actors[i];
-			if(actor.isIntersect(obj)) {
-				return obj;
+		//не понимаю, почему не возвращается объект
+		if(this.actors[0]) {
+
+			for(let obj of this.actors) {
+				if(actor.isIntersect(obj)) {
+					return obj;
+				}
 			}
 		}
+	}
+	obstacleAt(position, size) {
+		if(!(position instanceof Vector || size instanceof Vector)) {
+			throw new Error('Аргумент(ы) не является экземплром Actor');
+		}
+
 	}
 }
