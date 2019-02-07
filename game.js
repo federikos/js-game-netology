@@ -68,7 +68,7 @@ class Actor {
 			this.bottom > anyObj.top) {
 			return true;
 		}
-		
+
 		return false;
 	}
 }
@@ -103,20 +103,68 @@ class Level {
 		if(actor === undefined || !(actor instanceof Actor)) {
 			throw new Error('Ошибка в actor');
 		}
-		//не понимаю, почему не возвращается объект
-		if(this.actors[0]) {
 
-			for(let obj of this.actors) {
-				if(actor.isIntersect(obj)) {
-					return obj;
-				}
+		for(let obj of this.actors) {
+			if(actor.isIntersect(obj)) {
+				return obj;
 			}
 		}
 	}
 	obstacleAt(position, size) {
 		if(!(position instanceof Vector || size instanceof Vector)) {
-			throw new Error('Аргумент(ы) не является экземплром Actor');
+			throw new Error('Аргумент(ы) не являе(ю)тся экземпляром Actor');
 		}
-
+		//ниже ерунда
+		for(let row of this.grid) {
+			for(let obstacle of row) {
+				const actor = new Actor(position, size);
+				if(actor.isIntersect(obstacle)) {
+					return obstacle;
+				} else {
+					return undefined;
+				}
+			}
+		}
 	}
+}
+
+
+//пример
+
+
+const grid = [
+  [undefined, undefined],
+  ['wall', 'wall']
+];
+
+function MyCoin(title) {
+  this.type = 'coin';
+  this.title = title;
+}
+MyCoin.prototype = Object.create(Actor);
+MyCoin.constructor = MyCoin;
+
+const goldCoin = new MyCoin('Золото');
+const bronzeCoin = new MyCoin('Бронза');
+const player = new Actor();
+const fireball = new Actor();
+
+const level = new Level(grid, [ goldCoin, bronzeCoin, player, fireball ]);
+
+level.playerTouched('coin', goldCoin);
+level.playerTouched('coin', bronzeCoin);
+
+if (level.noMoreActors('coin')) {
+  console.log('Все монеты собраны');
+  console.log(`Статус игры: ${level.status}`);
+}
+
+const obstacle = level.obstacleAt(new Vector(1, 1), player.size);
+if (obstacle) {
+  console.log(`На пути препятствие: ${obstacle}`);
+}
+
+const otherActor = level.actorAt(player);
+if (otherActor === fireball) {
+  console.log('Пользователь столкнулся с шаровой молнией');
 }
