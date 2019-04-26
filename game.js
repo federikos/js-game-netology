@@ -84,7 +84,7 @@ class Level {
 		if(grid[0]) {
 			let max = 0;
 			grid.forEach((row) => {
-				max = (row.length > max) ? row.length : max; 
+				max = (row.length > max) ? row.length : max;
 			});
 			this.width = max;
 		}
@@ -110,10 +110,25 @@ class Level {
 		if(!(position instanceof Vector || size instanceof Vector)) {
 			throw new Error('Аргумент(ы) не являе(ю)тся экземпляром Actor');
 		}
-		//ниже ерунда
-		let fantom = new Actor(position, size);
-		if(fantom.isIntersect) {
+		const checkAreaLeft = Math.round(position.x);
+		const checkAreaRight = Math.round(position.x + size.x);
+		const checkAreaTop = Math.round(position.y);
+		const checkAreaBottom = Math.round(position.y + size.y);
 
+		if(checkAreaBottom > this.height) {
+			return 'lava';
+		}
+
+		if(checkAreaTop < 0 ||
+			 checkAreaLeft < 0 ||
+		 	 checkAreaRight > this.width) {
+				 return 'wall';
+		}
+
+		for(let i = checkAreaTop; i < checkAreaBottom; i++) {
+			for(let j = checkAreaLeft; j < checkAreaRight; j++) {
+				if(this.grid[i][j]) return this.grid[i][j];
+			}
 		}
 	}
 }
