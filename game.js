@@ -165,9 +165,6 @@ class Level {
 
 }
 
-//пример
-
-
 const grid = [
   [undefined, undefined],
   ['wall', 'wall']
@@ -179,6 +176,21 @@ function MyCoin(title) {
 }
 MyCoin.prototype = Object.create(Actor);
 MyCoin.constructor = MyCoin;
+
+//Функция MyCoin из оригинального кода примера не срабатывает при запуске файла в node.js
+// Ошибка: \game.js:58 throw new Error('Объект не является экземпляром Actor');
+// Если переписать эту функцию в виде класса на "новом синтаксисе" ES6 (закомментирована ниже), пример срабатывает.
+
+
+// class MyCoin extends Actor {
+// 	constructor(title, position, size, speed) {
+// 		super(position, size, speed);
+// 		this.title = title;
+// 	}
+// 	get type() {
+// 		return 'coin';
+// 	}
+// }
 
 const goldCoin = new MyCoin('Золото');
 const bronzeCoin = new MyCoin('Бронза');
