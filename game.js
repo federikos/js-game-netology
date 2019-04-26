@@ -148,6 +148,21 @@ class Level {
 		}
 		return true;
 	}
+
+	playerTouched(objType, actor) {
+		if(this.status === null) {
+			if(objType === 'lava' || objType === 'fireball') {
+				this.status = 'lost';
+			}
+			if(objType === 'coin' && actor instanceof Actor) {
+				this.removeActor(actor);
+				if(this.noMoreActors('coin')) {
+					this.status = 'won';
+				}
+			}
+		}
+	}
+
 }
 
 //пример
