@@ -141,6 +141,13 @@ class Level {
 			this.actors.splice(indexToDelete, 1);
 		}
 	}
+
+	noMoreActors(actorType) {
+		for (let actor of this.actors) {
+			if (actor.type === actorType) return false;
+		}
+		return true;
+	}
 }
 
 //пример
