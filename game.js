@@ -92,9 +92,11 @@ class Level {
 		this.status = null;
 		this.finishDelay = 1;
 	}
+
 	isFinished() {
 		return this.status !== null && this.finishDelay < 0;
 	}
+
 	actorAt(actor) {
 		if(actor === undefined || !(actor instanceof Actor)) {
 			throw new Error('Ошибка в actor');
@@ -106,6 +108,7 @@ class Level {
 			}
 		}
 	}
+
 	obstacleAt(position, size) {
 		if(!(position instanceof Vector || size instanceof Vector)) {
 			throw new Error('Аргумент(ы) не являе(ю)тся экземпляром Actor');
@@ -129,6 +132,13 @@ class Level {
 			for(let j = checkAreaLeft; j < checkAreaRight; j++) {
 				if(this.grid[i][j]) return this.grid[i][j];
 			}
+		}
+	}
+
+	removeActor(actor) {
+		const indexToDelete = this.actors.indexOf(actor);
+		if(indexToDelete > -1) {
+			this.actors.splice(indexToDelete, 1);
 		}
 	}
 }
