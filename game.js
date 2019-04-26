@@ -8,7 +8,7 @@ class Vector {
 
 	plus(vector) {
 		if(!(vector instanceof Vector)) {
-			throw new Error('Ошибка');
+			throw new Error('Можно прибавлять к вектору только вектор типа Vector');
 		}
 		return new Vector(vector.x + this.x, vector.y + this.y);
 	}
@@ -32,11 +32,11 @@ class Actor {
 			throw new Error('В конструктор передан не вектор');
 		}
 	}
-	
+
 	act() {
 	}
 
-	
+
 	get left() {
 		return this.pos.x;
 	}
@@ -77,24 +77,20 @@ class Level {
 	constructor(grid = [], actors = []) {
 		this.grid = grid.slice();
 		this.actors = actors.slice();
+		this.player = this.actors.find(actor => actor.type === 'player');
 		this.height = grid.length;
 		this.width = 0;
 
 		if(grid[0]) {
-			let diff = false;
-			let max = grid[0].length;
-			for(let row of grid) {
-				if(row.length > max) {
-					diff = true;
-					max = row.length;
-				}
-			}
-			this.width = diff ? grid[max].length : grid[0].length;
+			let max = 0;
+			grid.forEach((row) => {
+				max = (row.length > max) ? row.length : max; 
+			});
+			this.width = max;
 		}
 
 		this.status = null;
 		this.finishDelay = 1;
-		this.player = this.actors.filter(actor => actor.type === 'player').shift();
 	}
 	isFinished() {
 		return this.status !== null && this.finishDelay < 0;
@@ -115,19 +111,12 @@ class Level {
 			throw new Error('Аргумент(ы) не являе(ю)тся экземпляром Actor');
 		}
 		//ниже ерунда
-		for(let row of this.grid) {
-			for(let obstacle of row) {
-				const actor = new Actor(position, size);
-				if(actor.isIntersect(obstacle)) {
-					return obstacle;
-				} else {
-					return undefined;
-				}
-			}
+		let fantom = new Actor(position, size);
+		if(fantom.isIntersect) {
+
 		}
 	}
 }
-
 
 //пример
 
