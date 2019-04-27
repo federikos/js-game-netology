@@ -54,7 +54,8 @@ class Actor {
 	}
 
 	isIntersect(anyObj) {
-		if(!(anyObj instanceof Actor)) {
+		if(!(anyObj instanceof Actor) && !(Actor.isPrototypeOf(anyObj))) {
+			//2-я часть проверки для отрабатывания кода примера
 		 	throw new Error('Объект не является экземпляром Actor');
 		}
 
@@ -72,6 +73,8 @@ class Actor {
 		return false;
 	}
 }
+
+
 
 class Level {
 	constructor(grid = [], actors = []) {
@@ -154,7 +157,8 @@ class Level {
 			if(objType === 'lava' || objType === 'fireball') {
 				this.status = 'lost';
 			}
-			if(objType === 'coin' && actor instanceof Actor) {
+			if(objType === 'coin' && actor instanceof Actor || Actor.isPrototypeOf(actor)) {
+				//2-я часть проверки для совместимости с кодом примера
 				this.removeActor(actor);
 				if(this.noMoreActors('coin')) {
 					this.status = 'won';
@@ -177,10 +181,7 @@ function MyCoin(title) {
 MyCoin.prototype = Object.create(Actor);
 MyCoin.constructor = MyCoin;
 
-//Функция MyCoin из оригинального кода примера не срабатывает при запуске файла в node.js
-// Ошибка: \game.js:58 throw new Error('Объект не является экземпляром Actor');
-// Если переписать эту функцию в виде класса на "новом синтаксисе" ES6 (закомментирована ниже), пример срабатывает.
-
+// Экземпляры MyCoin из оригинального кода примера не проходят проверку instanceof для Actor. Проблема решается доп. проверкой (см. комментарии выше), или записью функции MyCoin в "новом синтаксе" (закомментирован ниже)
 
 // class MyCoin extends Actor {
 // 	constructor(title, position, size, speed) {
