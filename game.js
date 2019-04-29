@@ -169,51 +169,24 @@ class Level {
 
 }
 
+class LevelParser {
+	constructor(map) {
+		this.map = map;
+	}
+	actorFromSymbol(symbol) {
+		return symbol ? this.map[symbol] : undefined;
+	}
+}
+
+//Game running
 const grid = [
-  [undefined, undefined],
-  ['wall', 'wall']
+  new Array(3),
+  ['wall', 'wall', 'lava']
 ];
 
-function MyCoin(title) {
-  this.type = 'coin';
-  this.title = title;
-}
-MyCoin.prototype = Object.create(Actor);
-MyCoin.constructor = MyCoin;
+class Player extends Actor {
 
-// Экземпляры MyCoin из оригинального кода примера не проходят проверку instanceof для Actor. Проблема решается доп. проверкой (см. комментарии выше), или записью функции MyCoin в "новом синтаксе" (закомментирован ниже)
-
-// class MyCoin extends Actor {
-// 	constructor(title, position, size, speed) {
-// 		super(position, size, speed);
-// 		this.title = title;
-// 	}
-// 	get type() {
-// 		return 'coin';
-// 	}
-// }
-
-const goldCoin = new MyCoin('Золото');
-const bronzeCoin = new MyCoin('Бронза');
-const player = new Actor();
-const fireball = new Actor();
-
-const level = new Level(grid, [ goldCoin, bronzeCoin, player, fireball ]);
-
-level.playerTouched('coin', goldCoin);
-level.playerTouched('coin', bronzeCoin);
-
-if (level.noMoreActors('coin')) {
-  console.log('Все монеты собраны');
-  console.log(`Статус игры: ${level.status}`);
 }
 
-const obstacle = level.obstacleAt(new Vector(1, 1), player.size);
-if (obstacle) {
-  console.log(`На пути препятствие: ${obstacle}`);
-}
-
-const otherActor = level.actorAt(player);
-if (otherActor === fireball) {
-  console.log('Пользователь столкнулся с шаровой молнией');
-}
+const level = new Level(grid);
+runLevel(level, DOMDisplay);
