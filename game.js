@@ -176,6 +176,18 @@ class LevelParser {
 	actorFromSymbol(symbol) {
 		return symbol ? this.map[symbol] : undefined;
 	}
+	obstacleFromSymbol(symbol) {
+		switch (symbol) {
+			case 'x':
+				return 'wall';
+				break;
+			case '!':
+				return 'lava';
+				break;
+			default:
+				return undefined;
+		}
+	}
 }
 
 //Game running
