@@ -73,8 +73,6 @@ class Actor {
 	}
 }
 
-
-
 class Level {
 	constructor(grid = [], actors = []) {
 		this.grid = grid.slice();
@@ -192,4 +190,48 @@ class LevelParser {
 			return [...row].map(cell => this.obstacleFromSymbol(cell));
 		});
 	}
+	createActors(plan) {
+		const objects = [];
+		for(let y = 0; y < plan.length; y++) {
+			for(let x = 0; x < plan[y].length; x++) {
+				const cell = plan[y][x];
+				let constr = this.map ? this.map[cell] : undefined;
+				if(constr &&
+					 typeof constr === 'function' &&
+				 	 new constr instanceof Actor ) {
+					const pos = new Vector(x, y);
+					objects.push(new constr(pos));
+				}
+			}
+		}
+		return objects;
+	}
 }
+
+//проверка метода createActors
+let plan =
+	[
+	    '         ',
+	    '         ',
+	    '    =    ',
+	    '       o ',
+	    '     !xxx',
+	    ' @       ',
+	    'xxx!     ',
+	    '         '
+	];
+class Player extends Actor {
+
+}
+class HorizontalFireball extends Actor {
+
+}
+
+
+	const actorDict = {
+  '@': Player,
+  '=': HorizontalFireball
+};
+
+const levelParser = new LevelParser();
+console.log(levelParser.createActors(plan));
