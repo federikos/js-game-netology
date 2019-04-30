@@ -36,7 +36,6 @@ class Actor {
 	act() {
 	}
 
-
 	get left() {
 		return this.pos.x;
 	}
@@ -188,17 +187,9 @@ class LevelParser {
 				return undefined;
 		}
 	}
+	createGrid(plan) {
+		return plan.map((row) => {
+			return [...row].map(cell => this.obstacleFromSymbol(cell));
+		});
+	}
 }
-
-//Game running
-const grid = [
-  new Array(3),
-  ['wall', 'wall', 'lava']
-];
-
-class Player extends Actor {
-
-}
-
-const level = new Level(grid);
-runLevel(level, DOMDisplay);
