@@ -226,5 +226,9 @@ class Fireball extends Actor {
 		return new Vector(this.pos.x + this.speed.x * time,
 											this.pos.y + this.speed.y * time);
 	}
+	handleObstacle() {
+		this.speed.x = -this.speed.x;
+		this.speed.y = -this.speed.y;
+	}
 }
 //проверка
