@@ -239,4 +239,33 @@ class Fireball extends Actor {
 		}
 	}
 }
+
+class HorizontalFireball extends Fireball {
+	constructor(position) {
+		super();
+		this.pos = position;
+		this.size = new Vector(1, 1);
+		this.speed = new Vector(2, 0);
+	}
+}
+
+class VerticalFireball extends Fireball {
+	constructor(position) {
+		super();
+		this.pos = position;
+		this.size = new Vector(1, 1);
+		this.speed = new Vector(0, 2);
+	}
+}
 //проверка
+const time = 5;
+const speed = new Vector(1, 0);
+const position = new Vector(5, 5);
+
+const ball = new Fireball(position, speed);
+
+const nextPosition = ball.getNextPosition(time);
+console.log(`Новая позиция: ${nextPosition.x}: ${nextPosition.y}`);
+
+ball.handleObstacle();
+console.log(`Текущая скорость: ${ball.speed.x}: ${ball.speed.y}`);
