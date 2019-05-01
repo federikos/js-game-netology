@@ -206,32 +206,21 @@ class LevelParser {
 		}
 		return objects;
 	}
+	parse(plan) {
+		return new Level(this.createGrid(plan), this.createActors(plan));
+	}
 }
 
-//проверка метода createActors
-let plan =
-	[
-	    '         ',
-	    '         ',
-	    '    =    ',
-	    '       o ',
-	    '     !xxx',
-	    ' @       ',
-	    'xxx!     ',
-	    '         '
-	];
-class Player extends Actor {
-
+class Fireball extends Actor {
+	constructor(position = new Vector(0, 0),
+			    speed = new Vector(0, 0)) {
+		super();
+		this.pos = position;
+		this.speed = speed;
+		this.size = new Vector(1, 1);
+	}
+	get type() {
+		return 'fireball';
+	}
 }
-class HorizontalFireball extends Actor {
-
-}
-
-
-	const actorDict = {
-  '@': Player,
-  '=': HorizontalFireball
-};
-
-const levelParser = new LevelParser();
-console.log(levelParser.createActors(plan));
+//проверка
