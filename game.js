@@ -282,5 +282,8 @@ class Coin extends Actor {
 	get type() {
 		return 'coin';
 	}
+	updateSpring(time = 1) {
+		this.spring = this.spring + this.springSpeed * time;
+	}
 }
 //проверка
