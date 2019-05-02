@@ -309,4 +309,20 @@ class Player extends Actor {
 		return 'player';
 	}
 }
-//проверка
+
+
+//запуск игры
+const actorDict = {
+  '@': Player,
+	'o': Coin,
+	'=': HorizontalFireball,
+	'|': VerticalFireball,
+	'v': FireRain
+}
+
+const parser = new LevelParser(actorDict);
+loadLevels().then((schemasJSON) => {
+	let schemas = JSON.parse(schemasJSON); //Здесь добавить обработку возможных ошибок при парсинге
+	runGame(schemas, parser, DOMDisplay)
+	  .then(() => alert('Вы выиграли приз!'));
+});
