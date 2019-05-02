@@ -261,23 +261,26 @@ class VerticalFireball extends Fireball {
 class FireRain extends Fireball {
 	constructor(position) {
 		super();
-		this.pos = position;
 		this.size = new Vector(1, 1);
 		this.speed = new Vector(0, 3);
+		this.initialPos = position;
 	}
 	handleObstacle() {
-		this.pos = position;
+		this.pos = this.initialPos;
+	}
+}
+
+class Coin extends Actor {
+	constructor(position = new Vector(0, 0)) {
+		super();
+		this.size = new Vector(0.6, 0.6);
+		this.pos = position.plus(new Vector(0.2, 0.1));
+		this.springSpeed = 8;
+		this.springDist = 0.07;
+		this.spring = Math.random() * Math.PI * 2;
+	}
+	get type() {
+		return 'coin';
 	}
 }
 //проверка
-const time = 5;
-const speed = new Vector(1, 0);
-const position = new Vector(5, 5);
-
-const ball = new Fireball(position, speed);
-
-const nextPosition = ball.getNextPosition(time);
-console.log(`Новая позиция: ${nextPosition.x}: ${nextPosition.y}`);
-
-ball.handleObstacle();
-console.log(`Текущая скорость: ${ball.speed.x}: ${ball.speed.y}`);
