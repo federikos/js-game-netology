@@ -257,6 +257,18 @@ class VerticalFireball extends Fireball {
 		this.speed = new Vector(0, 2);
 	}
 }
+
+class FireRain extends Fireball {
+	constructor(position) {
+		super();
+		this.pos = position;
+		this.size = new Vector(1, 1);
+		this.speed = new Vector(0, 3);
+	}
+	handleObstacle() {
+		this.pos = position;
+	}
+}
 //проверка
 const time = 5;
 const speed = new Vector(1, 0);
