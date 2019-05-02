@@ -285,5 +285,8 @@ class Coin extends Actor {
 	updateSpring(time = 1) {
 		this.spring = this.spring + this.springSpeed * time;
 	}
+	getSpringVector() {
+		return new Vector(0, Math.sin(this.spring) * this.springDist);
+	}
 }
 //проверка
