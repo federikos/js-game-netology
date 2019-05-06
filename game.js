@@ -310,7 +310,6 @@ class Player extends Actor {
 	}
 }
 
-
 //запуск игры
 const actorDict = {
   '@': Player,
@@ -322,7 +321,24 @@ const actorDict = {
 
 const parser = new LevelParser(actorDict);
 loadLevels().then((schemasJSON) => {
-	let schemas = JSON.parse(schemasJSON); //Здесь добавить обработку возможных ошибок при парсинге
+	let schemas = [
+  [
+    '         ',
+    '         ',
+    '    =    ',
+    '       o ',
+    '     !xxx',
+    ' @       ',
+    'xxx!     ',
+    '         '
+  ]
+];
+	try {
+		schemas = JSON.parse(schemasJSON);
+	} catch(e) {
+		console.log(e.name, e.message);
+		alert('Извините, произошла ошибка при парсинге схем уровней игры. \nДоступен только один стандартный уровень.');
+	}
 	runGame(schemas, parser, DOMDisplay)
 	  .then(() => alert('Вы выиграли приз!'));
 });
