@@ -111,6 +111,7 @@ class Level {
 		if(!(position instanceof Vector || size instanceof Vector)) {
 			throw new Error('Аргумент(ы) не являе(ю)тся экземпляром Actor');
 		}
+
 		const checkAreaLeft = Math.floor(position.x);
 		const checkAreaRight = Math.ceil(position.x + size.x);
 		const checkAreaTop = Math.floor(position.y);
@@ -152,6 +153,7 @@ class Level {
 			if(objType === 'lava' || objType === 'fireball') {
 				this.status = 'lost';
 			}
+
 			if(objType === 'coin' && actor instanceof Actor || Actor.isPrototypeOf(actor)) {
 				//2-я часть проверки добавлена для совместимости с кодом примера
 				this.removeActor(actor);
@@ -161,7 +163,6 @@ class Level {
 			}
 		}
 	}
-
 }
 
 class LevelParser {
@@ -194,18 +195,22 @@ class LevelParser {
 
 	createActors(plan) {
 		const objects = [];
+
 		for(let y = 0; y < plan.length; y++) {
 			for(let x = 0; x < plan[y].length; x++) {
 				const cell = plan[y][x];
 				let constr = this.map ? this.map[cell] : undefined;
+
 				if(constr &&
 					 typeof constr === 'function' &&
 				 	 new constr instanceof Actor ) {
 					const pos = new Vector(x, y);
 					objects.push(new constr(pos));
 				}
+
 			}
 		}
+
 		return objects;
 	}
 
