@@ -54,7 +54,7 @@ class Actor {
 
 	isIntersect(anyObj) {
 		if(!(anyObj instanceof Actor) && !(Actor.isPrototypeOf(anyObj))) {
-			//2-я часть проверки для отрабатывания кода примера
+			//2-я часть проверки нужна для отрабатывания кода примера
 		 	throw new Error('Объект не является экземпляром Actor');
 		}
 
@@ -81,13 +81,11 @@ class Level {
 		this.height = grid.length;
 		this.width = 0;
 
-		if(grid[0]) {
-			let max = 0;
-			grid.forEach((row) => {
-				max = (row.length > max) ? row.length : max;
-			});
-			this.width = max;
-		}
+		let max = 0;
+		grid.forEach((row) => {
+			max = (row.length > max) ? row.length : max;
+		});
+		this.width = max;
 
 		this.status = null;
 		this.finishDelay = 1;
@@ -113,10 +111,10 @@ class Level {
 		if(!(position instanceof Vector || size instanceof Vector)) {
 			throw new Error('Аргумент(ы) не являе(ю)тся экземпляром Actor');
 		}
-		const checkAreaLeft = Math.round(position.x);
-		const checkAreaRight = Math.round(position.x + size.x);
-		const checkAreaTop = Math.round(position.y);
-		const checkAreaBottom = Math.round(position.y + size.y);
+		const checkAreaLeft = Math.floor(position.x);
+		const checkAreaRight = Math.ceil(position.x + size.x);
+		const checkAreaTop = Math.floor(position.y);
+		const checkAreaBottom = Math.ceil(position.y + size.y);
 
 		if(checkAreaBottom > this.height) {
 			return 'lava';
@@ -155,7 +153,7 @@ class Level {
 				this.status = 'lost';
 			}
 			if(objType === 'coin' && actor instanceof Actor || Actor.isPrototypeOf(actor)) {
-				//2-я часть проверки для совместимости с кодом примера
+				//2-я часть проверки добавлена для совместимости с кодом примера
 				this.removeActor(actor);
 				if(this.noMoreActors('coin')) {
 					this.status = 'won';
@@ -170,9 +168,11 @@ class LevelParser {
 	constructor(map) {
 		this.map = map;
 	}
+
 	actorFromSymbol(symbol) {
 		return symbol ? this.map[symbol] : undefined;
 	}
+
 	obstacleFromSymbol(symbol) {
 		switch (symbol) {
 			case 'x':
@@ -185,11 +185,13 @@ class LevelParser {
 				return undefined;
 		}
 	}
+
 	createGrid(plan) {
 		return plan.map((row) => {
 			return [...row].map(cell => this.obstacleFromSymbol(cell));
 		});
 	}
+
 	createActors(plan) {
 		const objects = [];
 		for(let y = 0; y < plan.length; y++) {
@@ -206,6 +208,7 @@ class LevelParser {
 		}
 		return objects;
 	}
+
 	parse(plan) {
 		return new Level(this.createGrid(plan), this.createActors(plan));
 	}
@@ -219,17 +222,20 @@ class Fireball extends Actor {
 		this.speed = speed;
 		this.size = new Vector(1, 1);
 	}
+
 	get type() {
 		return 'fireball';
 	}
+
 	getNextPosition(time = 1) {
 		return new Vector(this.pos.x + this.speed.x * time,
 											this.pos.y + this.speed.y * time);
 	}
+
 	handleObstacle() {
-		this.speed.x = -this.speed.x;
-		this.speed.y = -this.speed.y;
+		this.speed = this.speed.times(-1);
 	}
+
 	act(time, level) {
 		const nextPosition = this.getNextPosition(time);
 		if(level.obstacleAt(nextPosition, this.size)) {
@@ -265,6 +271,7 @@ class FireRain extends Fireball {
 		this.speed = new Vector(0, 3);
 		this.initialPos = position;
 	}
+
 	handleObstacle() {
 		this.pos = this.initialPos;
 	}
@@ -280,19 +287,24 @@ class Coin extends Actor {
 		this.springDist = 0.07;
 		this.spring = Math.random() * Math.PI * 2;
 	}
+
 	get type() {
 		return 'coin';
 	}
+
 	updateSpring(time = 1) {
 		this.spring = this.spring + this.springSpeed * time;
 	}
+
 	getSpringVector() {
 		return new Vector(0, Math.sin(this.spring) * this.springDist);
 	}
+
 	getNextPosition(time = 1) {
 		this.updateSpring(time);
 		return this.initialPos.plus(this.getSpringVector());
 	}
+
 	act(time) {
 		this.pos = this.getNextPosition(time);
 	}
@@ -305,6 +317,7 @@ class Player extends Actor {
 		this.size = new Vector(0.8, 1.5);
 		this.speed = new Vector(0, 0);
 	}
+
 	get type() {
 		return 'player';
 	}
@@ -333,12 +346,14 @@ loadLevels().then((schemasJSON) => {
     '         '
   ]
 ];
+
 	try {
 		schemas = JSON.parse(schemasJSON);
 	} catch(e) {
 		console.log(e.name, e.message);
 		alert('Извините, произошла ошибка при парсинге схем уровней игры. \nДоступен только один стандартный уровень.');
 	}
+
 	runGame(schemas, parser, DOMDisplay)
 	  .then(() => alert('Вы выиграли приз!'));
 });
