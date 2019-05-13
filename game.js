@@ -341,10 +341,10 @@ class Player extends Actor {
 //запуск игры
 const actorDict = {
   "@": Player,
-  o: Coin,
+  "o": Coin,
   "=": HorizontalFireball,
   "|": VerticalFireball,
-  v: FireRain
+  "v": FireRain
 };
 
 const parser = new LevelParser(actorDict);
