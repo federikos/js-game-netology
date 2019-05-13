@@ -204,9 +204,8 @@ class LevelParser {
   createActors(plan) {
     const objects = [];
 
-    for (let y = 0; y < plan.length; y++) {
-      for (let x = 0; x < plan[y].length; x++) {
-        const cell = plan[y][x];
+    plan.slice().forEach((row, y) => {
+      [...row].forEach((cell, x) => {
         let Constr = this.map ? this.map[cell] : null;
 
         if (
@@ -217,8 +216,8 @@ class LevelParser {
           const pos = new Vector(x, y);
           objects.push(new Constr(pos));
         }
-      }
-    }
+      });
+    });
 
     return objects;
   }
