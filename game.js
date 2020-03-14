@@ -347,27 +347,33 @@ const actorDict = {
 };
 
 const parser = new LevelParser(actorDict);
-loadLevels().then(schemasJSON => {
-  let schemas = [
-    [
-      "         ",
-      "         ",
-      "    =    ",
-      "       o ",
-      "     !xxx",
-      " @       ",
-      "xxx!     ",
-      "         "
-    ]
-  ];
 
-  try {
-    schemas = JSON.parse(schemasJSON);
-  } catch (e) {
+let schemas = [
+  [
+    "         ",
+    "         ",
+    "    =    ",
+    "       o ",
+    "     !xxx",
+    " @       ",
+    "xxx!     ",
+    "         "
+  ]
+];
+
+loadLevels()
+  .then(schemasJSON => {
+    try {
+      schemas = JSON.parse(schemasJSON);
+    } catch (e) {
+      console.log(e.name, e.message);
+      alert(`Произошла ошибка при парсинге схем уровней игры. \n
+            Доступен только один стандартный уровень.`);
+    }
+  })
+  .catch(e => {
     console.log(e.name, e.message);
-    alert(`Извините, произошла ошибка при парсинге схем уровней игры. \n
-           Доступен только один стандартный уровень.`);
-  }
-
-  runGame(schemas, parser, DOMDisplay).then(() => alert("Вы выиграли приз!"));
-});
+    alert(`Произошла ошибка при получении схем уровней игры. \n
+          Доступен только один стандартный уровень.`);
+  })
+  .finally(() => runGame(schemas, parser, DOMDisplay).then(() => alert("Вы выиграли приз!")));
