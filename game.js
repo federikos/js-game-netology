@@ -361,19 +361,12 @@ let schemas = [
   ]
 ];
 
-loadLevels()
-  .then(schemasJSON => {
-    try {
-      schemas = JSON.parse(schemasJSON);
-    } catch (e) {
-      console.log(e.name, e.message);
-      alert(`Произошла ошибка при парсинге схем уровней игры. \n
-            Доступен только один стандартный уровень.`);
-    }
-  })
-  .catch(e => {
-    console.log(e.name, e.message);
-    alert(`Произошла ошибка при получении схем уровней игры. \n
-          Доступен только один стандартный уровень.`);
-  })
-  .finally(() => runGame(schemas, parser, DOMDisplay).then(() => alert("Вы выиграли приз!")));
+if (levels) {
+  schemas = levels;
+} else {
+  alert(`Произошла ошибка при получении схем уровней игры. \n
+  Доступен только один стандартный уровень.`);
+}
+
+runGame(schemas, parser, DOMDisplay)
+  .then(() => alert("Вы выиграли приз!"));

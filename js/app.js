@@ -1,24 +1,5 @@
 'use strict';
 
-function loadLevels() {
-  return new Promise((done, fail) => {
-    const xhr = new XMLHttpRequest();
-    let url = './levels.json';
-    // if (location.hostname !== 'localhost') {
-    //   url = 'https://neto-api.herokuapp.com/js/diplom/levels.json';
-    // }
-    xhr.open('GET', url);
-    xhr.addEventListener('error', e => fail(xhr));
-    xhr.addEventListener('load', e => {
-      if (xhr.status !== 200) {
-        fail(xhr);
-      }
-      done(xhr.responseText);
-    });
-    xhr.send();
-  });
-}
-
 const scale = 30;
 const maxStep = 0.05;
 const wobbleSpeed = 8, wobbleDist = 0.07;
