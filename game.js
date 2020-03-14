@@ -369,4 +369,4 @@ if (levels) {
 }
 
 runGame(schemas, parser, DOMDisplay)
-  .then(() => alert("Вы выиграли приз!"));
+  .then(() => alert("Вы выиграли приз! (нет)"));
